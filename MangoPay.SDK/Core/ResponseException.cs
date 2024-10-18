@@ -17,8 +17,10 @@ namespace MangoPay.SDK.Core
             try
             {
                 this.ResponseErrorRaw = message;
-                this.ResponseError = JsonConvert.DeserializeObject<ResponseError>(message);
 				this.ResponseStatusCode = responseStatusCode;
+                if (message != null) {
+                    this.ResponseError = JsonConvert.DeserializeObject<ResponseError>(message);
+                }
 			}
             catch (JsonException)
             {

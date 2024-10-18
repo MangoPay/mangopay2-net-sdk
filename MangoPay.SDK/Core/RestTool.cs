@@ -2,6 +2,7 @@
 using MangoPay.SDK.Entities;
 using RestSharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,9 +12,9 @@ namespace MangoPay.SDK.Core
 {
     public class RestSharpDto
     {
-        private static RestSharpDto _instance = null;
+        private static readonly Dictionary<string, RestSharpDto> _instances = new Dictionary<string, RestSharpDto>();
 
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         private readonly RestClientOptions _options;
 
@@ -33,18 +34,18 @@ namespace MangoPay.SDK.Core
 
         public static RestSharpDto GetInstance(string url, int timeout)
         {
-            if (_instance == null)
+            if (!_instances.ContainsKey(url))
             {
                 lock (_lock) // now I can claim some form of thread safety...
                 {
-                    if (_instance == null)
+                    if (!_instances.ContainsKey(url))
                     {
-                        _instance = new RestSharpDto(url, timeout);
+                        _instances[url] = new RestSharpDto(url, timeout);
                     }
                 }
             }
 
-            return _instance;
+            return _instances[url];
         }
     }
 
