@@ -890,9 +890,41 @@ namespace MangoPay.SDK.Tests
         protected async Task<RefundDTO> GetNewRefundForTransfer(TransferDTO transfer)
         {
             var user = await this.GetJohn();
+            var debitedFunds = new Money
+            {
+                Amount = transfer.DebitedFunds.Amount,
+                Currency = transfer.DebitedFunds.Currency
+            };
+            var fees = new Money
+            {
+                Amount = transfer.Fees.Amount,
+                Currency = transfer.Fees.Currency
+            };
 
-            var refund = new RefundTransferPostDTO(user.Id);
+            var refund = new RefundTransferPostDTO(user.Id, fees, debitedFunds);
 
+            return await this.Api.Transfers.CreateRefundAsync(transfer.Id, refund);
+        }
+
+        /// <summary>Creates partial refund object for Tranfert.</summary>
+        /// <param name="transfer">Tranfert entity.</param>
+        /// <returns>Refund instance returned from API.</returns>
+        protected async Task<RefundDTO> GetPartialRefundForPayIn(TransferDTO transfer)
+        {
+            var user = await this.GetJohn();
+
+            var debitedFunds = new Money
+            {
+                Amount = 100,
+                Currency = transfer.DebitedFunds.Currency
+            };
+            var fees = new Money
+            {
+                Amount = 10,
+                Currency = transfer.Fees.Currency
+            };
+
+            var refund = new RefundTransferPostDTO(user.Id, fees, debitedFunds);
             return await this.Api.Transfers.CreateRefundAsync(transfer.Id, refund);
         }
 
