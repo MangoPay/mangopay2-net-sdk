@@ -38,6 +38,8 @@ namespace MangoPay.SDK.Core.Enumerations
 
 		REFUND_NOT_PROCESSED,
 		
-		COUNTERFEIT_PRODUCT
+		COUNTERFEIT_PRODUCT,
+
+		CUSTOMER_DISPUTE
 	}
 }
