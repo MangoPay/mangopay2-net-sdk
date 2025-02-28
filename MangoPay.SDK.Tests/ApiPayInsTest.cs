@@ -149,29 +149,7 @@ namespace MangoPay.SDK.Tests
         {
             try
             {
-                var wallet = await this.GetJohnsWallet();
-                var user = await this.GetJohn();
-
-                var payInPost = new PayInPayconiqPostDTO
-                {
-                    Tag = "custom meta",
-                    AuthorId = user.Id,
-                    DebitedFunds = new Money
-                    {
-                        Amount = 22,
-                        Currency = CurrencyIso.EUR
-                    },
-                    Fees = new Money
-                    {
-                        Amount = 10,
-                        Currency = CurrencyIso.EUR
-                    },
-                    ReturnURL = "http://www.my-site.com/returnURL",
-                    CreditedWalletId = wallet.Id,
-                    Country = "BE",
-                    CreditedUserId = user.Id
-                };
-
+                var payInPost = await payconiqPostDto();
                 var payIn = await this.Api.PayIns.CreatePayconiqAsync(payInPost);
 
                 Assert.IsTrue(payIn.Id.Length > 0);
@@ -182,6 +160,54 @@ namespace MangoPay.SDK.Tests
             {
                 Assert.Fail(ex.Message);
             }
+        }
+        
+        [Test]
+        public async Task Test_PayIns_Create_Payconiq_V2()
+        {
+            try
+            {
+                var payInPost = await payconiqPostDto();
+                var payIn = await this.Api.PayIns.CreatePayconiqV2Async(payInPost);
+
+                Assert.IsTrue(payIn.Id.Length > 0);
+                Assert.IsTrue(payIn.PaymentType == PayInPaymentType.PAYCONIQ);
+                Assert.IsTrue(payIn.ExecutionType == PayInExecutionType.WEB);
+                Assert.IsNotNull(payIn.DeepLinkURL);
+                Assert.IsNotNull(payIn.QRCodeURL);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+
+        private async Task<PayInPayconiqPostDTO> payconiqPostDto()
+        {
+            var wallet = await this.GetJohnsWallet();
+            var user = await this.GetJohn();
+
+            var payInPost = new PayInPayconiqPostDTO
+            {
+                Tag = "custom meta",
+                AuthorId = user.Id,
+                DebitedFunds = new Money
+                {
+                    Amount = 22,
+                    Currency = CurrencyIso.EUR
+                },
+                Fees = new Money
+                {
+                    Amount = 10,
+                    Currency = CurrencyIso.EUR
+                },
+                ReturnURL = "http://www.my-site.com/returnURL",
+                CreditedWalletId = wallet.Id,
+                Country = "BE",
+                CreditedUserId = user.Id
+            };
+
+            return payInPost;
         }
 
         [Test]

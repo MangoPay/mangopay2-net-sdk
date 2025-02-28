@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MangoPay.SDK.Entities.GET
+﻿namespace MangoPay.SDK.Entities.GET
 {
     public class PayInPayconiqDTO : PayInDTO
     {
@@ -13,5 +9,11 @@ namespace MangoPay.SDK.Entities.GET
         public string RedirectURL { get; set; }
 
         public string ExpirationDate { get; set; }
+        
+        public string StatementDescriptor { get; set; }
+        
+        public string Country { get; set; }
+        
+        public string QRCodeURL { get; set; }
     }
 }

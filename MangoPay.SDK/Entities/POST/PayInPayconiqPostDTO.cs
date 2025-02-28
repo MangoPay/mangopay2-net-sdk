@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MangoPay.SDK.Entities.POST
+﻿namespace MangoPay.SDK.Entities.POST
 {
     /// <summary>
     /// Payconiq Post Class
@@ -50,5 +46,8 @@ namespace MangoPay.SDK.Entities.POST
         /// Required
         /// </summary>
         public string Country { get; set; }
+        
+        /// <summary> A custom description to appear </summary>
+        public string StatementDescriptor { get; set; }
     }
 }
